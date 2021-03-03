@@ -203,7 +203,7 @@ def plot_specific_label(label, train):
 
 if __name__ == "__main__":
     """
-    Main function to test our function and explore the data
+    Main function to test our functions and explore the data
     """
 
     print("\n--- PRINT DATASET INFO ---")
