@@ -101,7 +101,7 @@ def plot_image_rgb(image_id):
     plt.show()
 
 
-def print_number_of_targets_per_image(train):
+def print_number_of_targets_per_label(train):
     """
     Printing a count for each label how much times it appears in protein images and plotting the results
 
@@ -143,6 +143,64 @@ def plot_correlation_matrix(train):
     plt.show()
 
 
+def plot_target_size(train):
+    """
+    Plotting and printing numbers of how many labels are there in photos in percentage and in raw numbers
+
+    :param train: train dataframe that contain id for all protein images with targeted labels
+    """
+
+    target_size_per_image = np.zeros(train.shape[0])
+    for iter in range(len(target_size_per_image)):
+        target_size_per_image[iter] = len(train.Target[iter].split())
+    target_counts = np.unique(target_size_per_image, return_counts=True)
+    percentage_count = np.round(100 * (np.array(target_counts[1]) / train.shape[0]))
+    # printing the target size
+    for iter in range(len(target_counts[0])):
+        print("Target length " + str(np.array(target_counts[0])[iter]) + " - " + str(np.array(target_counts[1])[iter]))
+    # plotting the target size
+    plt.figure(figsize=(20, 5))
+    sns.barplot(x=target_counts[0], y=percentage_count, palette="Reds")
+    plt.xlabel("Number of targets per image")
+    plt.ylabel("% of data")
+    plt.show()
+
+
+def plot_specific_label(label, train):
+    """
+    Plotting the number of occurrence other labels with some specific label to see some concrete correlation
+
+    :param label: specific label
+    :param train: train dataframe that contain id for all protein images with targeted labels
+    """
+
+    def count_specific_label(label):
+        """
+        Counting the number of occurrence other labels with some specific label to see some concrete correlation
+
+        :param label: specific label
+        :return: two arrays where first one are correlated labels and second one is number of occurrence of that correlated label
+        """
+
+        label_count = []
+        for iter in range(train.shape[0]):
+            if str(label) in train.Target[iter].split():
+                for sample_label in train.Target[iter].split():
+                    label_count.append(sample_label)
+        return np.unique(np.array(label_count), return_counts=True)
+
+    number_specific_label = count_specific_label(label)
+    # plotting the number of occurrence of specific label with other labels
+    x_plot_axis = [list_of_labels[int(sample_label)] for sample_label in np.array(number_specific_label[0])]
+    y_plot_axis = np.array(number_specific_label[1])
+    plt.figure(figsize=(10, 3))
+    sns.barplot(x=x_plot_axis, y=y_plot_axis, palette="Blues")
+    plt.xlabel("Label name")
+    plt.ylabel("Number of occurrence in " + list_of_labels[int(label)])
+    plt.show()
+
+
+
 if __name__ == "__main__":
     """
     Main function to test our function and explore the data
@@ -154,6 +212,10 @@ if __name__ == "__main__":
     print_image_labels(train.Target[1])
     plot_image_binary(train.Id[1])
     plot_image_rgb(train.Id[1])
-    print("\n--- PRINT NUMBER OF TARGETS PER IMAGE ---")
-    print_number_of_targets_per_image(train)
+    print("\n--- PRINT NUMBER OF TARGETS PER LABELS ---")
+    print_number_of_targets_per_label(train)
     plot_correlation_matrix(train)
+    print("\n--- PRINT TARGET SIZE ---")
+    plot_target_size(train)
+    # Lysosoms has an id 10
+    plot_specific_label('10', train)
