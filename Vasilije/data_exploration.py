@@ -179,7 +179,8 @@ def plot_specific_label(label, train):
         Counting the number of occurrence other labels with some specific label to see some concrete correlation
 
         :param label: specific label
-        :return: two arrays where first one are correlated labels and second one is number of occurrence of that correlated label
+        :return: two arrays where first one are correlated labels and second one is number of occurrence of that
+                 correlated label
         """
 
         label_count = []

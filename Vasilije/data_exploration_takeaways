@@ -3,7 +3,8 @@
 ----------------------------------
 
 
-1. There are 31072 samples in the training dataset, each containing 4 images that represents one color filter (red, green, blue or yellow)
+1. There are 31072 samples in the training dataset, each containing 4 images that represents one color filter (red,
+   green, blue or yellow)
 
 2. Given train dataset is quite imbalanced. Most common protein structures that occurs in the training set are:
     * Nucleoplasm (12885)
@@ -16,9 +17,11 @@
     * Lysosomes (28)
     * Endosomes (45)
     * Peroxisomes (53)
-   Due to imbalance training set, it will be hard to accurately predict those minor labels and targets and we will need to find some way to deal with this
+   Due to imbalance training set, it will be hard to accurately predict those minor labels and targets and we will need
+   to find some way to deal with this
 
 3. Most images have 1 or 2 label in a Target column, only two have 5 labels classified and that is the maximum
 
-4. About the correlation among the labels, many labels have some slight correlation with others. The biggest correlation is between Endosomes and Lysosomes,
-   while the second biggest correlation is between Mitotic spindle and Cytokinetic bridge.
+4. About the correlation among the labels, many labels have some slight correlation with others. The biggest correlation
+   is between Endosomes and Lysosomes, while the second biggest correlation is between Mitotic spindle and Cytokinetic
+   bridge.

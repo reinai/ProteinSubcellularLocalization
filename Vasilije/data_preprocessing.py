@@ -135,6 +135,76 @@ def image_segmentation(image_filename):
     plt.show()
 
 
+def optical_granulometry(image_filename):
+    pass
+
+
+def canny_detection_of_edges(image_filename, plot=True):
+    """
+    Detecting the edges of an image using a canny algorithm and plotting results
+
+    :param image_filename: filename of the image
+    :param plot: boolean value to see should we plot results or not
+    :return: detected edges of the image
+    """
+
+    current_image = plt.imread(DS_PATH + image_filename)
+    edges = skimage.feature.canny(current_image)
+    # plotting the edges of canny algorithm
+    if plot:
+        fig, (ax1, ax2) = plt.subplots(1, 2)
+        fig.suptitle('Canny edge detector')
+        ax1.imshow(current_image)
+        ax2.imshow(edges)
+        plt.show()
+    return edges
+
+
+def binary_hole_filling(image_filename):
+    """
+    Filling holes in the binary form of the photo and plotting results
+
+    :param image_filename: filename of the image
+    """
+    
+    current_image = plt.imread(DS_PATH + image_filename)
+    edges = canny_detection_of_edges(image_filename, plot=False)
+    filled_image = scipy.ndimage.binary_fill_holes(edges)
+    # plotting filling of the hole in the binary photo
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    fig.suptitle('Binary hole filling')
+    ax1.imshow(current_image)
+    ax2.imshow(filled_image)
+    plt.show()
+
+
+def adding_noise_to_image(image_filename):
+    """
+    Adding a noise to the image and plotting new created image with its histogram to see the change
+
+    :param image_filename: filename of the image
+    """
+
+    current_image = plt.imread(DS_PATH + image_filename)
+    current_binary_image = convert_to_binary_image(image_filename)
+    current_noised_binary_image = current_binary_image + 0.2 * np.random.randn(*current_binary_image.shape)
+    histogram_noised_image = np.histogram(current_noised_binary_image - current_noised_binary_image.mean(),
+                        bins=np.arange(current_noised_binary_image.min(), current_noised_binary_image.max(), 1 / 256))
+    histogram_normal_image = np.histogram(current_image - current_image.mean(), bins=np.arange(current_image.min(),
+                        current_image.max(), 1 / 256))
+    # plotting the image with and without the noise
+    figure, axes = plt.subplots(2, 2)
+    axes[0, 0].imshow(current_binary_image)
+    axes[0, 0].set_title('Image without the noise')
+    axes[0, 1].plot(histogram_normal_image[1][:-1], histogram_normal_image[0], lw=2)
+    axes[0, 1].set_title('Histogram image without the noise')
+    axes[1, 0].imshow(current_noised_binary_image)
+    axes[1, 0].set_title('Image with the noise')
+    axes[1, 1].plot(histogram_noised_image[1][:-1], histogram_noised_image[0], lw=2)
+    axes[1, 1].set_title('Histogram image with the noise')
+    plt.show()
+
+
 if __name__ == "__main__":
     """
     Main function to test our functions and preprocess the data
@@ -147,3 +217,6 @@ if __name__ == "__main__":
     image_reduction(image_filename + '_' + "yellow" + '.png')
     binary_opening(image_filename + '_' + "yellow" + '.png')
     image_segmentation(image_filename + '_' + "green" + '.png')
+    adding_noise_to_image(image_filename + '_' + "green" + '.png')
+    canny_detection_of_edges(image_filename + '_' + "green" + '.png')
+    binary_hole_filling(image_filename + '_' + "green" + '.png')
