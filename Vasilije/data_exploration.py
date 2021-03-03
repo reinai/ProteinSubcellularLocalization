@@ -147,7 +147,7 @@ if __name__ == "__main__":
     """
     Main function to test our function and explore the data
     """
-    
+
     print("\n--- PRINT DATASET INFO ---")
     train = read_dataset()
     print("\n--- PRINT LABELS FOR AN IMAGE ---")
@@ -157,3 +157,4 @@ if __name__ == "__main__":
     print("\n--- PRINT NUMBER OF TARGETS PER IMAGE ---")
     print_number_of_targets_per_image(train)
     plot_correlation_matrix(train)
+    #AAAAA
