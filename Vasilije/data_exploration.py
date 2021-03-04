@@ -220,3 +220,11 @@ if __name__ == "__main__":
     plot_target_size(train)
     # Lysosoms has an id 10
     plot_specific_label('10', train)
+    # Endosomes has an id 9
+    plot_specific_label('9', train)
+    # Microtubule ends has an id 15
+    plot_specific_label('15', train)
+    # Peroxisomes has an id 8
+    plot_specific_label('8', train)
+    # Rods & rings has an id 27
+    plot_specific_label('27', train)

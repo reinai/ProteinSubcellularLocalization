@@ -1,5 +1,5 @@
 ----------------------------------
---- DATA EXPLORATION TAKEOVERS ---
+--- DATA EXPLORATION TAKEAWAYS ---
 ----------------------------------
 
 
@@ -25,3 +25,17 @@
 4. About the correlation among the labels, many labels have some slight correlation with others. The biggest correlation
    is between Endosomes and Lysosomes, while the second biggest correlation is between Mitotic spindle and Cytokinetic
    bridge.
+
+5. Labels with the least occurrence in training set in correlation with other labels:
+    * Lysosomes - every occurrence of this label is followed with Endosomes label and they can also be found together
+      with Endoplasmic reticulum
+    * Endosomes - same observation as Lysosomes, but this label occurs more than Lysosomes and those 17 more are
+      only label for that sample
+    * Microtubule ends - occurs together with Nucleoplasm, Cytokinetic bridge, Nucleoli and Nuclear bodies and it is
+      significant
+    * Peroxisomes - occurs together with Nucleoplasm, Nucleoli, Plasma membrane, Cytosol, Nucleoli fibrillar center and
+      Golgi apparatus and it is not much significant
+    * Rods & rings - occurs together with Nucleoplasm, Centrosome, Nucleoli, Mitochondria, Nuclear speckles and Nuclear
+      bodies, where Nucleaoplasm and Nuclear bodies are significant ones
+
+6. The yellow filter is a combination of red and green
