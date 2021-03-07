@@ -71,7 +71,8 @@ def plot_image_binary(image_id):
     :param image_id: id of protein image
     """
 
-    fig, axis = plt.subplots(1,4, figsize=(16,4))
+    figure, axis = plt.subplots(1,4, figsize=(16,4))
+    figure.suptitle("Plot images", fontsize=24)
     for index, color in enumerate(["green","blue","yellow","red"]):
         image_filename_path = DS_PATH + "/train/" + image_id + "_" + color + ".png"
         img = plt.imread(image_filename_path)
@@ -98,6 +99,7 @@ def plot_image_rgb(image_id):
     rgb_image = rgb_image.reshape(all_color_images.shape[0], all_color_images.shape[0], 3)
     rgb_image = np.clip(rgb_image, 0, 1)
     plt.imshow(rgb_image)
+    plt.title("Plot image RGB", fontsize=24)
     plt.show()
 
 
@@ -117,6 +119,7 @@ def print_number_of_targets_per_label(train):
         print(list_of_labels[index] + " - " + str(value))
     # plotting counts for each label
     plt.figure(figsize=(14, 6))
+    plt.title("Count for labels", fontsize=24)
     plt.bar(range(len(list_of_labels)), labels_count)
     plt.ylabel('labels count')
     plt.xticks(range(len(list_of_labels)), list_of_labels, rotation=-90);
@@ -139,7 +142,7 @@ def plot_correlation_matrix(train):
     correlation_matrix = np.corrcoef(sample_labels_matrix, rowvar=False)
     plt.figure(figsize=(10, 8))
     sns.heatmap(correlation_matrix, xticklabels=list_of_labels, yticklabels=list_of_labels)
-    plt.title('Correlation matrix')
+    plt.title('Correlation matrix', fontsize=24)
     plt.show()
 
 
@@ -160,6 +163,7 @@ def plot_target_size(train):
         print("Target length " + str(np.array(target_counts[0])[iter]) + " - " + str(np.array(target_counts[1])[iter]))
     # plotting the target size
     plt.figure(figsize=(20, 5))
+    plt.title('Target size', fontsize=24)
     sns.barplot(x=target_counts[0], y=percentage_count, palette="Reds")
     plt.xlabel("Number of targets per image")
     plt.ylabel("% of data")
@@ -168,7 +172,7 @@ def plot_target_size(train):
 
 def plot_specific_label(label, train):
     """
-    Plotting the number of occurrence other labels with some specific label to see some concrete correlation
+    Plotting the number of occurrence of other labels with some specific label to see some concrete correlation
 
     :param label: specific label
     :param train: train dataframe that contain id for all protein images with targeted labels
@@ -195,9 +199,10 @@ def plot_specific_label(label, train):
     x_plot_axis = [list_of_labels[int(sample_label)] for sample_label in np.array(number_specific_label[0])]
     y_plot_axis = np.array(number_specific_label[1])
     plt.figure(figsize=(10, 3))
+    plt.title(list_of_labels[int(label)] + "  - correlation with other labels", fontsize=24)
     sns.barplot(x=x_plot_axis, y=y_plot_axis, palette="Blues")
     plt.xlabel("Label name")
-    plt.ylabel("Number of occurrence in " + list_of_labels[int(label)])
+    plt.ylabel("Number of occurrence with " + list_of_labels[int(label)])
     plt.show()
 
 
