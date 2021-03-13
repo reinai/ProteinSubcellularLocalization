@@ -190,7 +190,7 @@ def macro_F1_score(y_true, y_predicted):
 def macro_F1_loss(y_true, y_predicted):
     return 1 - macro_F1_score(y_true, y_predicted)
 
-
+"""
 model = load_model('gapnet-pl/models/gapnet.model', custom_objects={'f1': macro_F1_score})
 model.compile(
     loss='binary_crossentropy',
@@ -199,6 +199,7 @@ model.compile(
 
 print("Model summary:\n")
 model.summary()
+"""
 
 def test_gapnet_pl():
     image_folder_path = input("\nEnter test image folder path: ")
@@ -228,6 +229,6 @@ if __name__ == "__main__":
 
 """
 /home/nikola/Documents/TEST_PROTEIN/test
-/home/nikola/Desktop/ds_projekat/ProteinSubcellularLocalization/gapnet-pl/models/predictions_gapnet_pl.csv
+/home/nikola/Desktop/ds_projekat/ProteinSubcellularLocalization/models_weights_predictions/gap_net_pl/predictions_gapnet_pl.csv
 /home/nikola/Documents/TEST_PROTEIN/test.csv
 """
