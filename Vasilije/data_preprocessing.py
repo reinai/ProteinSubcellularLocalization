@@ -1,13 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib
 import skimage.filters
 import scipy.ndimage
-import sklearn.feature_extraction
-import sklearn.cluster
 import skimage.feature
 import skimage.transform
-import PIL
 plt.gray()
 
 DS_PATH = "../dataset/train/"
