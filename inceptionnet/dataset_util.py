@@ -17,9 +17,11 @@ warnings.filterwarnings("ignore")
 
 class DataUtil:
 
-    def __init__(self, path_to_train):
+    def __init__(self, path_to_train, path_to_test):
         self.path_to_train = path_to_train
+        self.path_to_test = path_to_test
         self.train_dataset = []
+        self.test_dataset = []
 
     def preprocess_train_data(self):
         train_data = pd.read_csv(self.path_to_train + '/train.csv')
@@ -29,10 +31,22 @@ class DataUtil:
                 'labels': np.array([int(label) for label in labels])})
         self.train_dataset = np.array(self.train_dataset)
 
+    def preprocess_test_data(self):
+        test_data = pd.read_csv(self.path_to_test + '/test.csv')
+        for name, labels in zip(test_data['Id'], test_data['Predicted'].str.split(' ')):
+            try:
+                labels_new = np.array([int(label) for label in labels])
+            except:
+                labels_new = []
+            self.test_dataset.append({
+                'path': os.path.join(self.path_to_test + '/test/', name),
+                'labels': labels_new })
+        self.test_dataset = np.array(self.test_dataset)
+
     def create_train(self, dataset_index, batch_size, shape, augment=True):
         while True:
             part_of_dataset = self.train_dataset[dataset_index]
-            part_of_dataset = shuffle(part_of_dataset)
+            part_of_dataset = shuffle(part_of_dataset, random_state=77)
             for start_of_batch in range(0, len(part_of_dataset), batch_size):
                 end_of_batch = min(start_of_batch + batch_size, len(part_of_dataset))
                 batch_images = []
@@ -45,6 +59,15 @@ class DataUtil:
                     batch_images.append(image / 255.)
                     batch_labels[i][train_batch[i]['labels']] = 1
                 yield np.array(batch_images, np.float32), batch_labels
+
+    def create_test(self, shape):
+        test_labels = np.zeros((len(self.test_dataset), 28))
+        test_images = []
+        for iter in range(len(self.test_dataset)):
+            image = self.load_rgb_image(self.test_dataset[iter]['path'], shape)
+            test_images.append(image / 255.)
+            test_labels[iter][self.test_dataset[iter]['labels']] = 1
+        return np.array(test_images, np.float32), test_labels
 
     @staticmethod
     def load_rgb_image(path, shape):
@@ -59,6 +82,6 @@ class DataUtil:
     def augment_image(image):
         augmented_image = iaa.Sequential([iaa.OneOf([
                 iaa.Affine(rotate=0), iaa.Affine(rotate=90), iaa.Affine(rotate=180), iaa.Affine(rotate=270),
-                iaa.Fliplr(0.5), iaa.Flipud(0.5)])], random_order=True)
+                iaa.Fliplr(0.5), iaa.Flipud(0.5)])], random_order=True, random_state=10)
         augmented_image = augmented_image.augment_image(image)
         return augmented_image

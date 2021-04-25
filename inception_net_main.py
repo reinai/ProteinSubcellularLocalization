@@ -1,4 +1,4 @@
-from inception_nn_model import CustomInceptionModel
+from inceptionnet.inception_nn_model import CustomInceptionModel
 
 if __name__ == "__main__":
     """
@@ -10,8 +10,8 @@ if __name__ == "__main__":
                                  warmup_epochs=2,
                                  regular_epochs=50,
                                  batch_size=16,
-                                 checkpoint_path='./checkpoint/InceptionV3.h5',
-                                 path_to_train="../dataset",
-                                 path_to_test="../dataset",
+                                 checkpoint_path='./inceptionnet/checkpoint/InceptionV3.h5',
+                                 path_to_train="./dataset",
+                                 path_to_test="./dataset",
                                  image_size=299)
-    model.train_inception_model()
+    print('Result -> ', model.test_inception_model())

@@ -10,9 +10,9 @@ from keras import metrics
 from keras.optimizers import Adam
 from keras import backend as K
 from keras.models import Model
-from dataset_util import DataUtil
+from inceptionnet.dataset_util import DataUtil
 import numpy as np
-
+from inceptionnet.macro_f1 import macro_f1_score
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -20,14 +20,14 @@ warnings.filterwarnings("ignore")
 class CustomInceptionModel:
 
     def __init__(self, input_shape, output_size, warmup_epochs, regular_epochs, batch_size, checkpoint_path,
-                 path_to_train, image_size):
+                 path_to_train, path_to_test, image_size):
         self.input_shape = input_shape
         self.output_size = output_size
         self.warmup_epochs = warmup_epochs
         self.regular_epochs = regular_epochs
         self.batch_size = batch_size
         self.checkpoint_path = checkpoint_path
-        self.data_util = DataUtil(path_to_train=path_to_train)
+        self.data_util = DataUtil(path_to_train=path_to_train, path_to_test=path_to_test)
         self.image_size = image_size
 
     def create_inception_model(self):
@@ -84,3 +84,15 @@ class CustomInceptionModel:
                             validation_data=validation_generator,
                             validation_steps=np.ceil(float(len(valid_indexes)) / float(self.batch_size)),
                             epochs=self.regular_epochs, verbose=1, callbacks=callbacks_list)
+
+    def test_inception_model(self):
+        model = self.create_inception_model()
+        model.load_weights(self.checkpoint_path)
+        self.data_util.preprocess_test_data()
+        test_images, test_labels = self.data_util.create_test(self.input_shape)
+        predicted_labels = np.zeros((len(test_images), 28))
+        for iter in range(len(test_images)):
+            score_predict = model.predict(test_images[iter][np.newaxis])[0]
+            label_predict = np.arange(28)[score_predict >= 0.2]
+            predicted_labels[iter][label_predict] = 1
+        return macro_f1_score(y_true=test_labels, y_predicted=predicted_labels)
