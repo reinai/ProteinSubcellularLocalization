@@ -43,6 +43,12 @@ class DataUtil:
                 'labels': labels_new })
         self.test_dataset = np.array(self.test_dataset)
 
+    def get_test_labels(self):
+        test_labels = np.zeros((len(self.test_dataset), 28))
+        for iter in range(len(self.test_dataset)):
+            test_labels[iter][self.test_dataset[iter]['labels']] = 1
+        return test_labels
+
     def create_train(self, dataset_index, batch_size, shape, augment=True):
         while True:
             part_of_dataset = self.train_dataset[dataset_index]

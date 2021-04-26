@@ -2,7 +2,7 @@ from inceptionnet.inception_nn_model import CustomInceptionModel
 
 if __name__ == "__main__":
     """
-    Main function to train our Inception model
+    Main function to test our Inception model
     """
 
     model = CustomInceptionModel(input_shape=(299, 299, 3),
@@ -14,4 +14,5 @@ if __name__ == "__main__":
                                  path_to_train="./dataset",
                                  path_to_test="./dataset",
                                  image_size=299)
-    print('Result -> ', model.test_inception_model())
+    print('Result -> ', model.calculate_predicted_macro_f1_score(
+           predicted_csv_path='./dataset/predicted_InceptionV3.csv'))

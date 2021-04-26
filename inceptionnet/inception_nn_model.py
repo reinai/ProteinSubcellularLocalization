@@ -13,6 +13,7 @@ from keras.models import Model
 from inceptionnet.dataset_util import DataUtil
 import numpy as np
 from inceptionnet.macro_f1 import macro_f1_score
+import pandas as pd
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -86,13 +87,32 @@ class CustomInceptionModel:
                             epochs=self.regular_epochs, verbose=1, callbacks=callbacks_list)
 
     def test_inception_model(self):
+        predicted_csv = pd.read_csv('../dataset/empty_test.csv')
         model = self.create_inception_model()
         model.load_weights(self.checkpoint_path)
         self.data_util.preprocess_test_data()
         test_images, test_labels = self.data_util.create_test(self.input_shape)
         predicted_labels = np.zeros((len(test_images), 28))
+        predicted = []
         for iter in range(len(test_images)):
             score_predict = model.predict(test_images[iter][np.newaxis])[0]
             label_predict = np.arange(28)[score_predict >= 0.2]
             predicted_labels[iter][label_predict] = 1
+            str_predict_label = ' '.join(str(label) for label in label_predict)
+            predicted.append(str_predict_label)
+        predicted_csv['Predicted'] = predicted
+        predicted_csv.to_csv('../dataset/predicted_InceptionV3.csv', index=False)
+
+    def calculate_predicted_macro_f1_score(self, predicted_csv_path):
+        self.data_util.preprocess_test_data()
+        test_labels = self.data_util.get_test_labels()
+        predicted_labels = np.zeros((len(test_labels), 28))
+        predicted_csv = pd.read_csv(predicted_csv_path)
+        for index, labels in enumerate(predicted_csv['Predicted'].str.split(' ')):
+            try:
+                labels_new = np.array([int(label) for label in labels])
+            except:
+                labels_new = []
+            predicted_labels[index][labels_new] = 1
         return macro_f1_score(y_true=test_labels, y_predicted=predicted_labels)
+
