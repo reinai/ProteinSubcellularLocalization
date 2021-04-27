@@ -14,5 +14,10 @@ if __name__ == "__main__":
                                  path_to_train="./dataset",
                                  path_to_test="./dataset",
                                  image_size=299)
-    print('Result -> ', model.calculate_predicted_macro_f1_score(
-           predicted_csv_path='./dataset/predicted_InceptionV3.csv'))
+    predicted_csv_path = input("Enter file path to our predictions: ")
+    print('Macro F1 score: ', model.calculate_predicted_macro_f1_score(
+           predicted_csv_path=predicted_csv_path))
+
+"""
+/home/eugen/Desktop/SIAP/ProteinSubcellularLocalization/models_weights_predictions/inception_net/predicted_InceptionV3.csv
+"""
