@@ -29,7 +29,7 @@ class BernoulliMixtureModel(object):
 
         :param number_of_components: we have K components, where every component represents one target group
         :param maximum_number_of_iterations:
-        :param tolerance:
+        :param tolerance: set to a small number by default
         """
         self.number_of_components = number_of_components
         self.maximum_number_of_iterations = maximum_number_of_iterations
