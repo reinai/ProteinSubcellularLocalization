@@ -21,14 +21,3 @@ def macro_f1_score(y_true, y_predicted):
     macro_f1 = 2 * precision * recall / (precision + recall + K.epsilon())
     macro_f1 = tf.where(tf.math.is_nan(macro_f1), tf.zeros_like(macro_f1), macro_f1)
     return float(K.mean(macro_f1))  # returns tf.tensor representation, thus we need float
-
-
-def macro_f1_loss(y_true, y_predicted):
-    """
-    Counting a macro F1 loss for the predicted labels
-
-    :param y_true: true ground labels
-    :param y_predicted: predicted labels
-    :return: macro F1 loss
-    """
-    return 1 - macro_f1_score(y_true, y_predicted)

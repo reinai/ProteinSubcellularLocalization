@@ -1,4 +1,5 @@
 from inception_nn_model import CustomInceptionModel
+import tensorflow as tf
 
 if __name__ == "__main__":
     """
@@ -15,3 +16,8 @@ if __name__ == "__main__":
                                  path_to_test="../dataset",
                                  image_size=299)
     model.train_inception_model()
+    """
+    model.create_inception_model()
+    dot_img_file = './model_image/custom_inceptionV3_model.png'
+    tf.keras.utils.plot_model(model.model, to_file=dot_img_file, show_shapes=True)
+    """
