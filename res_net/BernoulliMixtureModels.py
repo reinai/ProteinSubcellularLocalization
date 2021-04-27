@@ -131,7 +131,3 @@ class BernoulliMixtureModel(object):
                 self.reset_params()
                 print(self.log_likelihood)
                 break
-
-
-if __name__ == "__main__":
-    pass

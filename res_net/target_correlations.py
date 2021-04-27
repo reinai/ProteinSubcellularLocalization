@@ -58,6 +58,7 @@ model.fit(X)
 results = targets.copy()
 results["cluster"] = np.argmax(model.gamma, axis=1)
 
+########################################################################################################################
 print("\n1. How are specific protein patterns (organelles) distributed by percentage over clusters?")
 print("""Several clusters have only one specific target protein.
 
@@ -109,3 +110,88 @@ cluster_names = {
     23: "Cytoplasmic bodies & Aggresomes",
     24: "Lipid droplets & Peroxisomes & Cell junctions"
 }
+
+########################################################################################################################
+print("\n2. In one certain cluster what is the percentage of presence of a certain organelle?")
+print("""This shows us what kind of protein patterns (organelles) we will always find per cluster. For example, 
+endoplasmatic reticulum, lysosome and endosome cluster shows that almost all samples hold the endoplasmatic reticulum 
+with 1. In contrast, due to the rareness and omnipresence of lysosomes and endosomes the hotness of them is very low. A 
+lot of samples do not have them even though all targets of lysosomes and endosomes can be find within that cluster.
+
+Gives us more insights of the imbalance of target proteins per cluster.
+
+Nucleoplasm and Cytosol are the dominating targets that influence the composition of many clusters.
+
+Rods and Rings and Microtubule ends are dominated by more common classes like Nucleoplasm, Nucleoli and Nuclear bodies.
+
+Once we have found the cluster 1 we can definitely say that all of its samples have an Aggresome.
+""")
+cluster_size = results.groupby("cluster").Nucleoplasmn.count()
+cluster_composition = results.groupby("cluster").sum().apply(lambda l: l / cluster_size, axis=0) * 100
+cluster_composition = cluster_composition.apply(np.round).astype(np.int)
+
+cluster_composition = cluster_composition.reset_index()
+cluster_composition.cluster = cluster_composition.cluster.apply(lambda l: cluster_names[l])
+cluster_composition = cluster_composition.set_index("cluster")
+
+plt.figure(figsize=(20, 20))
+sns.heatmap(cluster_composition, cmap="PuBuGn", annot=True, fmt="g", cbar=False)
+plt.title("In one certain cluster what is the percentage of presence of a certain organelle?")
+plt.ylabel("")
+plt.show()
+
+########################################################################################################################
+print("\n3. Which clusters are more probable to appear?")
+results["cluster_names"] = results.cluster.apply(lambda l: cluster_names[l])
+cluster_ids = np.arange(0, 25)
+names = [cluster_names[l] for l in cluster_ids]
+
+pi = pd.Series(data=model.pi, index=names).sort_values(ascending=False)
+plt.figure(figsize=(20, 5))
+sns.barplot(x=pi.index, y=pi.values, palette="Set2", order=pi.index)
+plt.xticks(rotation=90)
+plt.title("Which clusters are more probable to appear?")
+plt.show()
+
+########################################################################################################################
+print("\n4. What is the number of samples per clusters?")
+cluster_counts = results.groupby("cluster").cluster.count()
+cluster_counts = cluster_counts.sort_values()
+names = [cluster_names[num] for num in cluster_counts.index]
+
+plt.figure(figsize=(20, 5))
+sns.barplot(x=names, y=cluster_counts.values, order=names, palette="ch:s=.25,rot=-.25")
+plt.xticks(rotation=90)
+plt.title("What is the number of samples per clusters?")
+plt.show()
+
+########################################################################################################################
+print("\n5. What is the number of targets per clusters?")
+print("""Low dense clusters have multiple targets.
+
+Many samples only have one or two target proteins.
+
+There are only two clusters that have at least two targets present: Nucleoli fibrillar center & Cytoplasmic bodies and
+Rods & Rings, Microtubule ends, Nuclear bodies.
+""")
+
+results["number_of_targets"] = results.drop("cluster", axis=1).sum(axis=1)
+
+multilabel_stats = results.groupby("cluster_names").number_of_targets.value_counts()
+multilabel_stats /= results.groupby("cluster_names").number_of_targets.count()
+multilabel_stats = multilabel_stats.unstack()
+multilabel_stats.fillna(0, inplace=True)
+multilabel_stats = 100 * multilabel_stats
+multilabel_stats = multilabel_stats.apply(np.round)
+multilabel_stats = multilabel_stats.astype(np.int)
+
+plt.figure(figsize=(20, 5))
+plt.title("5. What is the number of targets per clusters?")
+sns.heatmap(multilabel_stats.transpose(),
+            square=True,
+            cbar=False,
+            cmap="Reds",
+            annot=True)
+plt.show()
+
+########################################################################################################################
