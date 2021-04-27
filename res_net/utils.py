@@ -5,10 +5,11 @@ import numpy as np
 import os
 import pandas as pd
 from label_information import label_names
-from fastai.transforms import RandomRotate, TfmType, RandomDihedral, RandomLighting, Cutout, CropType
-from fastai.dataset import FilesDataset
-from oversampling import TEST, DATA_DIRECTORY
+from fastai.transforms import RandomRotate, TfmType, RandomDihedral, RandomLighting, Cutout, CropType, tfms_from_stats
+from fastai.dataset import FilesDataset, ImageData
+from oversampling import TEST, DATA_DIRECTORY, val_n, tr_n, test_names
 
+nw = 2  # number of workers
 
 def read_rgby_image(path, id):
     colors = ['red', 'green', 'blue', 'yellow']
@@ -61,10 +62,9 @@ def get_data(sz, bs, is_test=False):
                     RandomLighting(0.05, 0.05, tfm_y=TfmType.NO), Cutout(n_holes=25, length=10*sz//128,
                                                                          tfm_y=TfmType.NO)]
     #mean and std in of each channel in the train set
-    stats = A([0.08069, 0.05258, 0.05487, 0.08282], [0.13704, 0.10145, 0.15313, 0.13814])
-    tfms = tfms_from_stats(stats, sz, crop_type=CropType.NO, tfm_y=TfmType.NO,
-                aug_tfms=aug_tfms)
-    ds = ImageData.get_ds(pdFilesDataset, (tr_n[:-(len(tr_n)%bs)], TRAIN),
-                (val_n,TRAIN), tfms, test=(test_names, TEST))
-    md = ImageData(PATH, ds, bs, num_workers=nw, classes=None)
+    stats = ([0.08069, 0.05258, 0.05487, 0.08282], [0.13704, 0.10145, 0.15313, 0.13814])
+    tfms = tfms_from_stats(stats, sz, crop_type=CropType.NO, tfm_y=TfmType.NO, aug_tfms=aug_tfms)
+    ds = ImageData.get_ds(pdFilesDataset, (tr_n[:-(len(tr_n)%bs)], DATA_DIRECTORY + "/train"),
+                          (val_n, DATA_DIRECTORY + "/train"), tfms, test=(test_names, TEST))
+    md = ImageData("/", ds, bs, num_workers=nw, classes=None)
     return md
