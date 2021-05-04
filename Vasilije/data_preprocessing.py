@@ -46,9 +46,9 @@ def otsu_thresholding(image_filename):
         """
 
         if np.shape(threshold) != ():
-            plt.title('%s threashold=[%s]' % (title, str(np.shape(threshold))))
+            plt.title('%s threshold=[%s]' % (title, str(np.shape(threshold))))
         else:
-            plt.title('%s threashold=%0.3f' % (title, threshold))
+            plt.title('%s threshold=%0.3f' % (title, threshold))
 
     figure = plt.figure(figsize=(15, 4))
     figure.suptitle("Otsu threshold", fontsize=24)
