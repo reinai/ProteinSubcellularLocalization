@@ -4,7 +4,7 @@ Subcellular Classification of Protein Patterns in Human Cells. Group project don
 ## Programs & libraries needed in order to run this project
 * [PyTorch](https://pytorch.org/) : Open source machine learning library based on the Torch library
 * [TensorFlow](https://www.tensorflow.org/) : End-to-end open source platform for machine learning
-* [Keras](https://www.tensorflow.org/) : Software library that provides a high-level Python interface for artificial neural networks
+* [Keras](https://keras.io/) : Software library that provides a high-level Python interface for artificial neural networks
 * [NumPy](https://www.numpy.org/) : Fundamental package for scientific computing with Python
 * [OpenCV](https://opencv.org/) : Library of programming functions mainly aimed at real-time computer vision
 * [Pandas](https://pandas.pydata.org/) : Fast, powerful, flexible and easy to use open source data analysis and manipulation tool
