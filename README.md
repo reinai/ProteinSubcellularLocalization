@@ -13,7 +13,7 @@ Subcellular Classification of Protein Patterns in Human Cells. Group project don
 * [scikit-learn](https://scikit-learn.org/stable/) : A pure machine learning library
 
 ## Report
-For more details read report (written in Serbian, IEEE format): ???
+For more details read report (written in Serbian, IEEE format): [REPORT.pdf](https://github.com/reinai/ProteinSubcellularLocalization/blob/main/REPORT.pdf)
 <br>
 
 <br>
